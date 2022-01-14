@@ -161,12 +161,12 @@ export const constantRoutes = [
   },
 
   {
-    path: 'external-link',
+    path: 'promise',
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'https://github.com/Promise-W',
+        meta: { title: 'promise@W', icon: 'link' }
       }
     ]
   },
