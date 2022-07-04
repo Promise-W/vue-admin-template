@@ -34,6 +34,11 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
+// 加载jsbc组件
+import 'jsbc/dist/css/js-base-components.css'
+import JSBC from 'jsbc'
+Vue.use(JSBC)
+
 Vue.config.productionTip = false
 Vue.prototype.$post = post
 Vue.prototype.$get = get

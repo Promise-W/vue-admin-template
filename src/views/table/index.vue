@@ -40,6 +40,24 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <div style="margin: 30px 0">使用jsbc[list-table]渲染</div>
+
+    <ListTable
+      :option="option"
+      :data="list"
+      :table-loading="listLoading"
+      @refresh-change="fetchData"
+      @on-load="fetchData"
+    >
+      <template #status="scope">
+        <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
+      </template>
+      <template #created_at="scope">
+        <i class="el-icon-time" />
+        <span>{{ scope.row.display_time }}</span>
+      </template>
+    </ListTable>
   </div>
 </template>
 
@@ -60,7 +78,37 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: true,
+      option: {
+        indexLabel: 'ID',
+        menu: false,
+        addBtn: false,
+        searchBtn: false,
+        column: [
+          {
+            label: 'Title',
+            prop: 'title'
+          },
+          {
+            label: 'Author',
+            prop: 'author'
+          },
+          {
+            label: 'Pageviews',
+            prop: 'pageviews'
+          },
+          {
+            label: 'Status',
+            prop: 'status',
+            slot: true
+          },
+          {
+            label: 'Display_time',
+            prop: 'created_at',
+            slot: true
+          }
+        ]
+      }
     }
   },
   created() {
