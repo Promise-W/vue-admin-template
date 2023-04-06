@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     handleAIRepeat() {
+      this.repeat = ''
       if (!this.prompt) return
 
       getAiData({ prompt: this.prompt }).then(({ data }) => {
