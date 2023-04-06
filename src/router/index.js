@@ -89,6 +89,19 @@ export const constantRoutes = [
   },
 
   {
+    path: '/openAi',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'OpenAi',
+        component: () => import('@/views/openAi/index'),
+        meta: { title: 'OpenAi', icon: 'el-icon-user' }
+      }
+    ]
+  },
+
+  {
     path: '/form',
     component: Layout,
     children: [
