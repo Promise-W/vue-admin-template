@@ -2,7 +2,7 @@
   <div class="open-ai-c">
     <div class="title">与Ai对话，请描述您的需求-支持中文、英语、日本语等</div>
 
-    <div class="err-tip">抱歉，因本站使用的免费的gpt3.5，额度已经用完，本站正在加急想办法处理 o(╥﹏╥)o</div>
+    <div class="err-tip">本站使用的版本是gpt3.5，额度有限，本站正在加急想办法处理 o(╥﹏╥)o</div>
     <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
     <div class="pay-img-c">
       <el-image class="pay-img" :src="payImg" fit="fill" />
