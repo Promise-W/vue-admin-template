@@ -2,14 +2,24 @@
   <div class="open-ai-c">
     <div class="title">与Ai对话，请描述您的需求-支持中文、英语、日本语等</div>
 
-    <div class="err-tip">本站使用的版本是gpt3.5，额度有限，本站正在加急想办法处理 o(╥﹏╥)o</div>
-    <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
+    <div class="error-c">
+      <div class="err-tip">本站使用的版本是gpt3.5，额度有限，本站正在加急想办法处理 o(╥﹏╥)o</div>
+      <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
+    </div>
+
     <div class="pay-img-c">
       <el-image class="pay-img" :src="payImg" fit="fill" />
     </div>
 
     <div class="content">
-      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" />
+      <div class="mb20">
+        <el-select v-model="aiType" placeholder="请选择ai模型" size="medium" clearable>
+          <el-option label="GPT-3.5-Turbo" :value="1" />
+          <el-option label="通义千问" :value="2" />
+        </el-select>
+        <span class="ai-type-tip">若请求超时，可切换ai模型后重试</span>
+      </div>
+      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" maxlength="300" show-word-limit clearable />
       <div class="repeat-btn">
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
       </div>
@@ -32,6 +42,7 @@ export default {
     return {
       payImg: require('@/assets/images/payWx.jpg'),
       loading: false,
+      aiType: 1, // ai模型
       prompt: '',
       repeat: ''
     }
@@ -39,10 +50,11 @@ export default {
   methods: {
     handleAIRepeat() {
       this.repeat = ''
-      if (!this.prompt) return
+      if (!this.aiType) return this.$message.error('请选择ai模型')
+      if (!this.prompt) return this.$message.error('请输入描述')
 
       this.loading = true
-      getAiData({ prompt: this.prompt }).then(({ data }) => {
+      getAiData({ prompt: this.prompt, aiType: this.aiType }).then(({ data }) => {
         this.loading = false
         const message = data && data.aiData || ''
         let index = 0
@@ -76,6 +88,12 @@ export default {
   }
 
   .content {
+    .ai-type-tip {
+      margin-left: 10px;
+      font-size: 14px;
+      color: rgb(191, 203, 217);
+      font-weight: 500;
+    }
     .repeat-btn {
       margin: 20px 0;
       text-align: center;
@@ -89,10 +107,12 @@ export default {
     }
   }
 
-  .err-tip {
-    text-align: center;
-    margin-bottom: 20px;
-    color: red;
+  .error-c {
+    .err-tip {
+      text-align: center;
+      margin-bottom: 20px;
+      color: red;
+    }
   }
 
   .pay-img-c {
