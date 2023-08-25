@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getAiData(params) {
+export function getAiData(data) {
   return request({
     url: '/openAi/getData',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }

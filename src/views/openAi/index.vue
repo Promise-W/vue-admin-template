@@ -3,7 +3,6 @@
     <div class="title">与Ai对话，请描述您的需求-支持中文、英语、日本语等</div>
 
     <div class="error-c">
-      <div class="err-tip">本站使用的版本是gpt3.5，额度有限，本站正在加急想办法处理 o(╥﹏╥)o</div>
       <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
     </div>
 
@@ -14,8 +13,9 @@
     <div class="content">
       <div class="mb20">
         <el-select v-model="aiType" placeholder="请选择ai模型" size="medium" clearable>
-          <el-option label="GPT-3.5-Turbo" :value="1" />
-          <el-option label="通义千问" :value="2" />
+          <el-option label="GPT-3.5-Turbo" value="gpt" />
+          <el-option label="通义千问" value="ali" />
+          <el-option label="科大讯飞" value="keDa" />
         </el-select>
         <span class="ai-type-tip">若请求超时，可切换ai模型后重试</span>
       </div>
@@ -42,7 +42,7 @@ export default {
     return {
       payImg: require('@/assets/images/payWx.jpg'),
       loading: false,
-      aiType: 1, // ai模型
+      aiType: 'gpt', // ai模型
       prompt: '',
       repeat: ''
     }
