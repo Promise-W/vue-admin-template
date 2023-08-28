@@ -17,7 +17,7 @@
           <el-option label="通义千问" value="ali" />
           <el-option label="GPT-3" value="gpt" />
         </el-select>
-        <span class="ai-type-tip">若请求超时，可切换ai模型后重试</span>
+        <span class="ai-type-tip">若请求超时或答案不满意，可切换ai模型后重试</span>
       </div>
       <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" maxlength="300" show-word-limit :clearable="true" />
       <div class="repeat-btn">
@@ -45,7 +45,8 @@ export default {
     return {
       payImg: require('@/assets/images/payWx.jpg'),
       loading: false,
-      aiType: 'gpt', // ai模型
+      interval: null, // 定时器
+      aiType: 'keDa', // ai模型
       prompt: '',
       repeat: ''
     }
@@ -56,19 +57,21 @@ export default {
       if (!this.aiType) return this.$message.error('请选择ai模型')
       if (!this.prompt) return this.$message.error('请输入描述')
 
+      this.interval && clearInterval(this.interval) // 每次新的问答都要先清理定时器
+
       this.loading = true
       getAiData({ prompt: this.prompt, aiType: this.aiType }).then(({ data }) => {
         this.loading = false
         const message = data && data.aiData || ''
         let index = 0
 
-        const interval = setInterval(() => {
+        this.interval = setInterval(() => {
           this.repeat += message[index]
           index++
 
           // 当打印完成时，清除定时器
           if (index >= message.length) {
-            clearInterval(interval)
+            clearInterval(this.interval)
           }
         }, 50)
       }).catch(() => {
