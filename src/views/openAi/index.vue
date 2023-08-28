@@ -13,31 +13,34 @@
     <div class="content">
       <div class="mb20">
         <el-select v-model="aiType" placeholder="请选择ai模型" size="medium" clearable>
-          <el-option label="GPT-3.5-Turbo" value="gpt" />
-          <el-option label="通义千问" value="ali" />
           <el-option label="科大讯飞" value="keDa" />
+          <el-option label="通义千问" value="ali" />
+          <el-option label="GPT-3" value="gpt" />
         </el-select>
         <span class="ai-type-tip">若请求超时，可切换ai模型后重试</span>
       </div>
-      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" maxlength="300" show-word-limit clearable />
+      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" maxlength="300" show-word-limit :clearable="true" />
       <div class="repeat-btn">
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
+        <el-button type="danger" @click="prompt=''">清除描述</el-button>
       </div>
-      <el-input
-        v-model="repeat"
-        class="repeatInput"
-        type="textarea"
-        readonly
-        placeholder="请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试"
-      />
+      <div class="ai-repeat-c">
+        <VueMarkdown v-if="repeat" :source="repeat" class="markdown-body" />
+        <div v-else class="no-repeat-tip">
+          请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import './github-markdown.css'
+import VueMarkdown from 'vue-markdown'
 import { getAiData } from '@/api/openAi'
 
 export default {
+  components: { VueMarkdown },
   data() {
     return {
       payImg: require('@/assets/images/payWx.jpg'),
@@ -78,6 +81,8 @@ export default {
 
 <style lang="scss">
 .open-ai-c {
+  background-image: linear-gradient(to bottom right,#ddebfe,#f2f2fe);
+  margin: 20px;
   padding: 20px;
 
   .title {
@@ -120,6 +125,23 @@ export default {
 
     .pay-img {
       height: 300px;
+    }
+  }
+
+  .ai-repeat-c {
+    color: #1e1f24;
+    text-align: justify;
+    line-height: .26rem;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    position: relative;
+    min-height: 170px;
+
+    .no-repeat-tip {
+      padding: 10px;
+      color: #bfcbd9;
     }
   }
 }
