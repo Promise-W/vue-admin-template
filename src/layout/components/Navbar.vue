@@ -16,9 +16,9 @@
               Home
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/Promise-W">
+          <!-- <a target="_blank" href="https://github.com/Promise-W">
             <el-dropdown-item>Github</el-dropdown-item>
-          </a>
+          </a> -->
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/zh/">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a>
