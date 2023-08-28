@@ -24,7 +24,7 @@ switch (process.env.VUE_APP_ENV) {
 // create an axios instance
 const request = axios.create({
   baseURL: url,
-  timeout: 20 * 1000 // request timeout
+  timeout: 60 * 1000 // request timeout
 })
 
 function getPromiseFunc(url, params, headers, config) {
