@@ -6,6 +6,20 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
+import hljs from 'highlight.js'
+Vue.prototype.$hljs = hljs
+import 'highlight.js/styles/atom-one-dark.css' // 有多种样式可选，也可以到对应文件中定制化
+Vue.directive('highlight', function(el) { // 自定义命令v-highlight
+  const blocks = el.querySelectorAll('pre code')
+  blocks.forEach(block => {
+    hljs.highlightBlock(block)
+  })
+})
+
+// 复制组件引用
+import ClipBoard from 'clipboard'
+Vue.prototype.ClipBoard = ClipBoard
+
 import '@/styles/index.scss' // global css
 
 import App from './App'

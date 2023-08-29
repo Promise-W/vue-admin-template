@@ -1,17 +1,20 @@
 <template>
   <div class="open-ai-c">
-    <div class="title">与Ai对话，请描述您的需求-支持中文、英语、日本语等</div>
+    <div class="title">与Ai对话，请描述您的需求-支持多语言</div>
 
-    <div class="error-c">
+    <!-- <div class="error-c">
       <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
-    </div>
-
-    <div class="pay-img-c">
-      <el-image class="pay-img" :src="payImg" fit="fill" />
-    </div>
+    </div> -->
 
     <div class="content">
-      <div class="mb20">
+      <div class="ai-repeat-c mb20">
+        <div v-if="repeat" class="markdown-body"><VueMarkdown v-highlight :source="repeat" /></div>
+        <div v-else class="no-repeat-tip">
+          请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试
+        </div>
+      </div>
+
+      <div class="mb10">
         <el-select v-model="aiType" placeholder="请选择ai模型" size="medium" clearable>
           <el-option label="科大讯飞" value="keDa" />
           <el-option label="通义千问" value="ali" />
@@ -24,19 +27,24 @@
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
         <el-button type="danger" @click="prompt=''">清除描述</el-button>
       </div>
-      <div class="ai-repeat-c">
-        <VueMarkdown v-if="repeat" :source="repeat" class="markdown-body" />
-        <div v-else class="no-repeat-tip">
-          请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试
-        </div>
-      </div>
     </div>
+
+    <div class="donate-c">
+      <el-button type="text" size="small" @click="isVisitedDonateDlg=true">❤️ 爱心支持</el-button>
+    </div>
+    <el-dialog class="donateDlg" title="急需老板的爱❤️☺" :visible.sync="isVisitedDonateDlg">
+      <div class="pay-img-c">
+        <el-image class="pay-img" :src="payImg" fit="fill" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import './github-markdown.css'
+import Vue from 'vue'
+import 'github-markdown-css/github-markdown.css'
 import VueMarkdown from 'vue-markdown'
+import CodeCopy from '@/components/CodeCopy'
 import { getAiData } from '@/api/openAi'
 
 export default {
@@ -44,6 +52,7 @@ export default {
   data() {
     return {
       payImg: require('@/assets/images/payWx.jpg'),
+      isVisitedDonateDlg: false,
       loading: false,
       interval: null, // 定时器
       aiType: 'keDa', // ai模型
@@ -60,8 +69,12 @@ export default {
       this.interval && clearInterval(this.interval) // 每次新的问答都要先清理定时器
 
       this.loading = true
+
       getAiData({ prompt: this.prompt, aiType: this.aiType }).then(({ data }) => {
-        this.loading = false
+        this.repeat = data && data.aiData || ''
+        this.renderCodeCopy() // 渲染copy
+
+        /* 隐藏定时器
         const message = data && data.aiData || ''
         let index = 0
 
@@ -74,9 +87,26 @@ export default {
             clearInterval(this.interval)
           }
         }, 50)
-      }).catch(() => {
+        */
+      }).finally(() => {
         this.loading = false
       })
+    },
+    renderCodeCopy() {
+      setTimeout(() => {
+        // 给每一个 markdown-body  加上复制按钮，具体样式可以自己调整
+        document.querySelectorAll('.markdown-body pre').forEach((el) => {
+          if (el.classList.contains('code-copy-added')) return
+          const ComponentClass = Vue.extend(CodeCopy)
+          const instance = new ComponentClass()
+          instance.code = el.innerText
+          instance.parent = el
+          /* 手动挂载 */
+          instance.$mount()
+          el.classList.add('code-copy-added')
+          el.appendChild(instance.$el)
+        })
+      }, 100)
     }
   }
 }
@@ -84,9 +114,10 @@ export default {
 
 <style lang="scss">
 .open-ai-c {
-  background-image: linear-gradient(to bottom right,#ddebfe,#f2f2fe);
+  position: relative;
   margin: 20px;
   padding: 20px;
+  background-image: linear-gradient(to bottom right,#ddebfe,#f2f2fe);
 
   .title {
     text-align: center;
@@ -103,15 +134,8 @@ export default {
       font-weight: 500;
     }
     .repeat-btn {
-      margin: 20px 0;
+      margin-top: 20px;
       text-align: center;
-    }
-
-    .repeatInput {
-      background-color: #f4f4f4;
-      color: #333;
-
-      textarea { height: calc(100vh - 350px); }
     }
   }
 
@@ -136,16 +160,23 @@ export default {
     text-align: justify;
     line-height: .26rem;
     box-sizing: border-box;
-    padding: 10px;
+    padding: 20px;
     border-radius: 5px;
     background-color: #fff;
     position: relative;
-    min-height: 170px;
+    height: calc(100vh - 450px);
+    overflow-y: auto;
 
     .no-repeat-tip {
       padding: 10px;
       color: #bfcbd9;
     }
+  }
+
+  .donate-c {
+    position: absolute;
+    top: 15px;
+    right: 20px;
   }
 }
 </style>
