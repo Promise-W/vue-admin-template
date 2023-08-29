@@ -9,7 +9,7 @@
     >
       <i class="el-icon-document-copy myicon" />
     </div>
-    <div v-if="success" class="copy-success-text">copied!</div>
+    <!-- <div v-if="success" class="copy-success-text">copied!</div> -->
   </div>
 </template>
 
@@ -28,11 +28,8 @@ export default {
       _this.success = false
       const clipboard = new this.ClipBoard('.code-data-copy')
       clipboard.on('success', function(e) {
-        //    this.$message.error("提問不能為空");
         _this.success = true
-        // setTimeout(() => {
-        //   _this.success = false
-        // }, 300)
+        _this.$notify({ title: '成功', message: '复制成功', type: 'success' })
         clipboard.destroy() // 销毁,避免多次点击重复出现
       })
       clipboard.on('error', function() {

@@ -1,6 +1,6 @@
 <template>
   <div class="open-ai-c">
-    <div class="title">与Ai对话，请描述您的需求-支持多语言</div>
+    <div class="title">与Ai对话，请描述您的需求(支持多语言)</div>
 
     <!-- <div class="error-c">
       <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
@@ -32,7 +32,7 @@
     <div class="donate-c">
       <el-button type="text" size="small" @click="isVisitedDonateDlg=true">❤️ 爱心支持</el-button>
     </div>
-    <el-dialog class="donateDlg" title="急需老板的爱❤️☺" :visible.sync="isVisitedDonateDlg">
+    <el-dialog class="donateDlg" title="急需老板的爱❤️☺" width="25%" :visible.sync="isVisitedDonateDlg">
       <div class="pay-img-c">
         <el-image class="pay-img" :src="payImg" fit="fill" />
       </div>
@@ -103,10 +103,32 @@ export default {
           instance.parent = el
           /* 手动挂载 */
           instance.$mount()
+          const lang = this.getCodeLang(el)
+          if (lang && instance.$el) {
+            const elLang = document.createElement('span')
+            elLang.classList = ['code-lang']
+            elLang.innerHTML = `${lang} `
+            const elIcon = instance.$el.getElementsByClassName('el-icon-document-copy')[0]
+            elIcon && elIcon.before(elLang)
+          }
           el.classList.add('code-copy-added')
           el.appendChild(instance.$el)
         })
       }, 100)
+    },
+    // 获取code的类型
+    getCodeLang(elPre) {
+      let lang = ''
+      if (!elPre) return lang
+      const elCode = elPre.getElementsByTagName('code')[0]
+      if (elCode) {
+        elCode.classList.forEach(cl => {
+          if (String(cl || '').indexOf('language-') !== -1) {
+            lang = cl.split('-')[1] || ''
+          }
+        })
+      }
+      return lang
     }
   }
 }
@@ -164,6 +186,7 @@ export default {
     border-radius: 5px;
     background-color: #fff;
     position: relative;
+    min-height: 100px;
     height: calc(100vh - 450px);
     overflow-y: auto;
 
@@ -177,6 +200,12 @@ export default {
     position: absolute;
     top: 15px;
     right: 20px;
+  }
+
+  .code-lang {
+    font-size: 12px;
+    color: #bda6a6;
+    font-weight: 600;
   }
 }
 </style>
