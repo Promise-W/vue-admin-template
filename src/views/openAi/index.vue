@@ -1,13 +1,14 @@
 <template>
   <div class="open-ai-c">
-    <div class="title">与Ai对话，请描述您的需求(支持多语言)</div>
-
-    <!-- <div class="error-c">
-      <div class="err-tip">ps: 想使用gpt4版本的好心小伙伴可以支持一波(一毛也是爱❤)</div>
-    </div> -->
+    <div class="header-c">
+      <div class="title">与Ai对话(支持多语言)</div>
+      <div class="donate-c">
+        <el-button type="text" size="small" @click="isVisitedDonateDlg=true">❤️ 爱心支持</el-button>
+      </div>
+    </div>
 
     <div class="content">
-      <div class="ai-repeat-c mb20">
+      <div class="ai-repeat-c">
         <div v-if="repeat" class="markdown-body"><VueMarkdown v-highlight :source="repeat" /></div>
         <div v-else class="no-repeat-tip">
           请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试
@@ -29,10 +30,7 @@
       </div>
     </div>
 
-    <div class="donate-c">
-      <el-button type="text" size="small" @click="isVisitedDonateDlg=true">❤️ 爱心支持</el-button>
-    </div>
-    <el-dialog class="donateDlg" title="急需老板的爱❤️☺" width="25%" :visible.sync="isVisitedDonateDlg">
+    <el-dialog class="donate-dlg" title="急需老板的爱❤️☺" width="300px" :visible.sync="isVisitedDonateDlg">
       <div class="pay-img-c">
         <el-image class="pay-img" :src="payImg" fit="fill" />
       </div>
@@ -141,65 +139,58 @@ export default {
   padding: 20px;
   background-image: linear-gradient(to bottom right,#ddebfe,#f2f2fe);
 
-  .title {
+  .header-c {
     text-align: center;
-    font-size: 18px;
-    margin-bottom: 20px;
-    font-weight: 700;
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+    }
   }
 
   .content {
+    .ai-repeat-c {
+      margin-bottom: 10px;
+      color: #1e1f24;
+      text-align: justify;
+      line-height: .26rem;
+      box-sizing: border-box;
+      padding: 15px;
+      border-radius: 5px;
+      background-color: #fff;
+      position: relative;
+      min-height: 100px;
+      height: calc(100vh - 450px);
+      overflow-y: auto;
+
+      .no-repeat-tip {
+        padding: 10px;
+        color: #bfcbd9;
+        line-height: 22px;
+      }
+    }
+
     .ai-type-tip {
       margin-left: 10px;
       font-size: 14px;
       color: rgb(191, 203, 217);
       font-weight: 500;
     }
+
     .repeat-btn {
       margin-top: 20px;
       text-align: center;
     }
   }
 
-  .error-c {
-    .err-tip {
+  .donate-dlg {
+    .pay-img-c {
       text-align: center;
-      margin-bottom: 20px;
-      color: red;
+
+      .pay-img {
+        height: 300px;
+      }
     }
-  }
-
-  .pay-img-c {
-    text-align: center;
-
-    .pay-img {
-      height: 300px;
-    }
-  }
-
-  .ai-repeat-c {
-    color: #1e1f24;
-    text-align: justify;
-    line-height: .26rem;
-    box-sizing: border-box;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #fff;
-    position: relative;
-    min-height: 100px;
-    height: calc(100vh - 450px);
-    overflow-y: auto;
-
-    .no-repeat-tip {
-      padding: 10px;
-      color: #bfcbd9;
-    }
-  }
-
-  .donate-c {
-    position: absolute;
-    top: 15px;
-    right: 20px;
   }
 
   .code-lang {

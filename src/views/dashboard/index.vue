@@ -217,7 +217,7 @@ export default {
   .map-selector {
     position: absolute;
     z-index: 99;
-    top: 30px;
+    top: 50px;
     right: 20px;
     width: 120px;
 
