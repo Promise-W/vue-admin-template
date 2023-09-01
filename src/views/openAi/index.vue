@@ -19,6 +19,7 @@
         <el-select v-model="aiType" placeholder="请选择ai模型" size="medium" clearable>
           <el-option label="科大讯飞" value="keDa" />
           <el-option label="通义千问" value="ali" />
+          <el-option label="文心一言" value="baidu" />
           <el-option label="GPT-3" value="gpt" />
         </el-select>
         <span class="ai-type-tip">若请求超时或答案不满意，可切换ai模型后重试</span>
