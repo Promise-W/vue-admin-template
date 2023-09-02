@@ -8,8 +8,10 @@
     </div>
 
     <div class="content">
-      <div class="ai-repeat-c">
-        <div v-if="repeat" class="markdown-body"><VueMarkdown v-highlight :source="repeat" /></div>
+      <div id="ai-repeat-c">
+        <div v-if="repeat" class="markdown-body">
+          <VueMarkdown v-highlight :source="repeat" />
+        </div>
         <div v-else class="no-repeat-tip">
           请耐心等待回答 Ai生成它很快，但是由于网络问题我们需要等待，通常内容越长等待越久 如果长时间没反应请刷新页面重试
         </div>
@@ -24,7 +26,7 @@
         </el-select>
         <span class="ai-type-tip">若请求超时或答案不满意，可切换ai模型后重试</span>
       </div>
-      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="输入描述" maxlength="2000" show-word-limit :clearable="true" />
+      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="请输入描述" maxlength="2000" show-word-limit :clearable="true" />
       <div class="repeat-btn">
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
         <el-button type="danger" @click="prompt=''">清除描述</el-button>
@@ -61,17 +63,20 @@ export default {
   },
   methods: {
     handleAIRepeat() {
-      this.repeat = ''
       if (!this.aiType) return this.$message.error('请选择ai模型')
       if (!this.prompt) return this.$message.error('请输入描述')
+
+      this.repeat += `  \n<div class="prompt-c"><span>${this.prompt}</span></div>   \n`
+      this.scrollToBottom()
 
       this.interval && clearInterval(this.interval) // 每次新的问答都要先清理定时器
 
       this.loading = true
 
       getAiData({ prompt: this.prompt, aiType: this.aiType }).then(({ data }) => {
-        this.repeat = data && data.aiData || ''
+        this.repeat += `<div class="res-c">${data && data.aiData || ''}  \n</div>   \n`
         this.renderCodeCopy() // 渲染copy
+        this.scrollToBottom()
 
         /* 隐藏定时器
         const message = data && data.aiData || ''
@@ -91,6 +96,7 @@ export default {
         this.loading = false
       })
     },
+    // 渲染代码的复制按钮
     renderCodeCopy() {
       setTimeout(() => {
         // 给每一个 markdown-body  加上复制按钮，具体样式可以自己调整
@@ -114,6 +120,13 @@ export default {
           el.appendChild(instance.$el)
         })
       }, 100)
+    },
+    // 滚到底部
+    scrollToBottom() {
+      setTimeout(() => {
+        const elAiC = document.getElementById('ai-repeat-c')
+        elAiC.scrollTop = elAiC.scrollHeight
+      }, 500)
     },
     // 获取code的类型
     getCodeLang(elPre) {
@@ -150,7 +163,7 @@ export default {
   }
 
   .content {
-    .ai-repeat-c {
+    #ai-repeat-c {
       margin-bottom: 10px;
       color: #1e1f24;
       text-align: justify;
@@ -168,6 +181,28 @@ export default {
         padding: 10px;
         color: #bfcbd9;
         line-height: 22px;
+      }
+
+      .prompt-c {
+        text-align: right;
+        width: 100%;
+        margin-bottom: 20px;
+
+        span {
+          display: inline-block;
+          border-radius: 16px;
+          padding: 12px 16px;
+          background: #7365ff;
+          color: #fff;
+        }
+      }
+
+      .res-c {
+        border-radius: 16px;
+        padding: 12px 16px;
+        background: #eee;
+        width: 100%;
+        margin-bottom: 20px
       }
     }
 
