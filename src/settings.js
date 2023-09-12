@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Promise@W',
+  title: '多平台AI',
 
   /**
    * @type {boolean} true | false
