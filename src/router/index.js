@@ -88,18 +88,18 @@ export const constantRoutes = [
   //   ]
   // },
 
-  {
-    path: '/openAi',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'OpenAi',
-        component: () => import('@/views/openAi/index'),
-        meta: { title: 'OpenAi', icon: 'el-icon-user' }
-      }
-    ]
-  },
+  // {
+  //   path: '/szMap',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'szMap',
+  //       component: () => import('@/views/szMap/index'),
+  //       meta: { title: 'SzMap', icon: 'el-icon-user' }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/form',
