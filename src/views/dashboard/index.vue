@@ -26,7 +26,7 @@
         </el-select>
         <span class="ai-type-tip">若请求超时或答案不满意，可切换ai模型后重试</span>
       </div>
-      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="请输入描述" maxlength="2000" show-word-limit :clearable="true" />
+      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="请输入描述" maxlength="2000" show-word-limit :clearable="true" @keydown.enter.native="handleEnter" />
       <div class="repeat-btn">
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
         <el-button type="danger" @click="prompt=''">清除描述</el-button>
@@ -62,6 +62,14 @@ export default {
     }
   },
   methods: {
+    handleEnter(event) { // 输入法的enter忽略，输入框内的shift+enter换行、单独enter触发AI请求
+      if (event.code === 'Enter' && !event.shiftKey && !event.isComposing) {
+        event.cancelBubble = true // ie阻止冒泡行为
+        event.stopPropagation()// Firefox阻止冒泡行为
+        event.preventDefault() // 取消事件的默认动作*换行
+        this.handleAIRepeat()
+      }
+    },
     handleAIRepeat() {
       if (!this.aiType) return this.$message.error('请选择ai模型')
       if (!this.prompt) return this.$message.error('请输入描述')
