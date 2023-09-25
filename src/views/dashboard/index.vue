@@ -26,7 +26,7 @@
         </el-select>
         <span class="ai-type-tip">若请求超时或答案不满意，可切换ai模型后重试</span>
       </div>
-      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="请输入描述" maxlength="2000" show-word-limit :clearable="true" @keydown.enter.native="handleEnter" />
+      <el-input v-model="prompt" class="promptInput" type="textarea" :rows="5" placeholder="请输入描述，Enter键直接搜索，Shift+Enter键换行" maxlength="2000" show-word-limit :clearable="true" @keydown.enter.native="handleEnter" />
       <div class="repeat-btn">
         <el-button :loading="loading" type="primary" @click="handleAIRepeat">AI回答</el-button>
         <el-button type="danger" @click="prompt=''">清除描述</el-button>
