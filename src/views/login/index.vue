@@ -1,6 +1,6 @@
 <template>
   <div v-loading.fullscreen.lock="pageLoading" class="login-container">
-    <el-form v-show="false" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">Login</h3>
@@ -73,7 +73,7 @@ export default {
       }
     }
     return {
-      pageLoading: true,
+      pageLoading: false,
       loginForm: {
         username: 'admin',
         password: '123456'
@@ -96,15 +96,15 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => { // 免登录
-      this.pageLoading = false
-      this.$store.dispatch('user/login', this.loginForm).then(() => {
-        this.$router.push({ path: this.redirect || '/' })
-        this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
-    }, 300)
+    // setTimeout(() => { // 免登录
+    //   this.pageLoading = false
+    //   this.$store.dispatch('user/login', this.loginForm).then(() => {
+    //     this.$router.push({ path: this.redirect || '/' })
+    //     this.loading = false
+    //   }).catch(() => {
+    //     this.loading = false
+    //   })
+    // }, 300)
   },
   methods: {
     showPwd() {
